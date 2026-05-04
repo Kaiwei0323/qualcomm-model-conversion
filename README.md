@@ -120,3 +120,7 @@ Inspect the quantized DLC:
 snpe-dlc-info -i dlcs/detr_resnet101_int8.dlc
 ```
 
+## Reference
+SNPE environment setup reference: [Qualcomm SNPE SDK setup (Linux)](https://docs.qualcomm.com/nav/home/setup_linux.html?product=1601111740010412)
+
+Model Quantization: [Quantized vs Non-Quantized Models](https://docs.qualcomm.com/doc/80-63442-10/topic/quantized_models.html)
