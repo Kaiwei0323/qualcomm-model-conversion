@@ -1,0 +1,12 @@
+services:
+  app:
+    build: .
+    image: qualcomm-model-conversion:local
+    working_dir: /app
+    volumes:
+      # Two-way sync: your project folder ↔ /app (new files either side stay in sync)
+      - .:/app
+    stdin_open: true
+    tty: true
+    # Interactive shell; override when needed: docker compose run --rm app -- snpe-net-run ...
+    command: bash
