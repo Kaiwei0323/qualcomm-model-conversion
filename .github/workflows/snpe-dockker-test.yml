@@ -1,0 +1,55 @@
+name: SNPE Docker Test
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Install Docker Compose
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y docker-compose
+
+      # Optional: cache models to speed up CI
+      - name: Download assets
+        run: |
+          chmod +x download.sh
+          ./download.sh
+
+      - name: Build Docker image
+        run: docker compose build
+
+      - name: Start container
+        run: docker compose up -d
+
+      - name: Wait for container
+        run: sleep 5
+
+      - name: Verify container is running
+        run: docker ps
+
+      # 🔥 CORE CHECK
+      - name: Check SNPE tool exists
+        run: |
+          docker compose exec -T app bash -c "
+            echo 'Checking snpe-onnx-to-dlc...'
+            if ! command -v snpe-onnx-to-dlc > /dev/null; then
+              echo '❌ snpe-onnx-to-dlc NOT found'
+              exit 1
+            fi
+            echo '✅ snpe-onnx-to-dlc found'
+          "
+
+      # 🔥 STRONGER CHECK (recommended)
+      - name: Run SNPE help command
+        run: |
+          docker compose exec -T app bash -c "
+            snpe-onnx-to-dlc --help
+          "
