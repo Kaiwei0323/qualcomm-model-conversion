@@ -38,18 +38,10 @@ jobs:
       # 🔥 CORE CHECK
       - name: Check SNPE tool exists
         run: |
-          docker compose exec -T app bash -c "
-            echo 'Checking snpe-onnx-to-dlc...'
-            if ! command -v snpe-onnx-to-dlc > /dev/null; then
-              echo '❌ snpe-onnx-to-dlc NOT found'
-              exit 1
-            fi
-            echo '✅ snpe-onnx-to-dlc found'
-          "
+          # Non-interactive `bash -c` does not read /etc/bash.bashrc; source SNPE env like setup_env.sh does.
+          docker compose exec -T app bash -c 'set -e; echo "Checking snpe-onnx-to-dlc..."; source "${SNPE_ROOT}/bin/envsetup.sh"; if ! command -v snpe-onnx-to-dlc >/dev/null; then echo "❌ snpe-onnx-to-dlc NOT found"; echo "SNPE_ROOT=${SNPE_ROOT}"; echo "PATH=${PATH}"; ls -la "${SNPE_ROOT}/bin" 2>/dev/null | head -n 20 || true; exit 1; fi; echo "✅ snpe-onnx-to-dlc found"'
 
       # 🔥 STRONGER CHECK (recommended)
       - name: Run SNPE help command
         run: |
-          docker compose exec -T app bash -c "
-            snpe-onnx-to-dlc --help
-          "
+          docker compose exec -T app bash -c 'set -e; source "${SNPE_ROOT}/bin/envsetup.sh"; snpe-onnx-to-dlc --help'
