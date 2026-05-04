@@ -84,6 +84,8 @@ Inspect the quantized DLC:
 snpe-dlc-info -i dlcs/yolov8s_int8.dlc
 ```
 
+---
+
 ### DETR ResNet101
 
 Convert DETR ResNet101 ONNX to DLC (no **`--quantization_overrides`** in this flow):
@@ -107,7 +109,11 @@ python3 ${SNPE_ROOT}/examples/Models/InceptionV3/scripts/create_inceptionv3_raws
 
 python3 ${SNPE_ROOT}/examples/Models/InceptionV3/scripts/create_file_list.py \
   -i output_img_480 -o output_img_480/image_file_list.txt -e '*.raw'
+```
 
+Run quantization:
+
+```bash
 snpe-dlc-quantize \
   --input_dlc dlcs/detr_resnet101_fp32.dlc \
   --input_list output_img_480/image_file_list.txt \
