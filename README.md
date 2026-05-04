@@ -1,11 +1,6 @@
 # Qualcomm model conversion (SNPE + Docker)
 
 Convert ONNX model to SNPE DLC inside Docker
-## Prerequisites
-
-- [Docker Desktop](https://www.docker.com/products/docker-desktop/) (Windows)
-- [Git for Windows](https://git-scm.com/download/win) (includes **Git Bash**) or **WSL**, to run `download.sh`
-- **`wget`** and **`unzip`** available in that shell (Git Bash includes them)
 
 ## Dependencies
 
