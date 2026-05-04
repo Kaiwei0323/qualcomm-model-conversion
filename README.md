@@ -1,11 +1,11 @@
 # Qualcomm model conversion (SNPE + Docker)
 
-Convert ONNX model to SNPE DLC inside Docker
+Convert ONNX models to SNPE DLC inside Docker.
 
 ## Dependencies
 
-- SNPE SDK: v2.22.6.240515
-- Android NDK: android-ndk-r26c-linux
+- SNPE SDK: `v2.22.6.240515`
+- Android NDK: `android-ndk-r26c-linux`
 
 ## 1. Download assets on the host
 
@@ -15,7 +15,7 @@ From the repository root:
 bash download.sh
 ```
 
-This will download Android NDK, SNPE SDK, Yolov8, detr, and encoding file check **`models/`**, **`encodings/`**, and **`sdks/`**.
+This will download Android NDK, SNPE SDK, YOLOv8, DETR, and encoding files. Check **`models/`**, **`encodings/`**, and **`sdks/`**.
 
 ## 2. Build the image
 
@@ -43,15 +43,7 @@ mkdir -p dlcs
 
 ### YOLOv8
 
-Inspect an existing DLC (optional):
-
-```bash
-snpe-dlc-info -i dlcs/yolov8s_fp32.dlc
-```
-
-Yolov8 workflow
-
-Convert ONNX to DLC with quantization encodings:
+Convert YOLOv8 ONNX to DLC with quantization encodings:
 
 ```bash
 snpe-onnx-to-dlc \
@@ -60,9 +52,10 @@ snpe-onnx-to-dlc \
   --output_path dlcs/yolov8s_fp32.dlc
 ```
 
-Quantize yolov8 fp32 model to int8
-1. prepare calibrate image
-1. Build square resized images / raw assets and a file list at **`640×640`**, then run **`snpe-dlc-quantize`**:
+Quantize YOLOv8 FP32 model to INT8:
+
+1. Prepare calibration images in `test_img/`.
+2. Build square resized images / raw assets and a file list at **`output_img_640`**:
 
 ```bash
 mkdir -p output_img_640
@@ -74,7 +67,9 @@ python3 ${SNPE_ROOT}/examples/Models/InceptionV3/scripts/create_file_list.py \
   -i output_img_640 -o output_img_640/image_file_list.txt -e '*.raw'
 
 ```
-run quantization
+
+Run quantization:
+
 ```bash
 snpe-dlc-quantize \
   --input_dlc dlcs/yolov8s_fp32.dlc \
@@ -91,7 +86,7 @@ snpe-dlc-info -i dlcs/yolov8s_int8.dlc
 
 ### DETR ResNet101
 
-Convert **`models/detr_resnet101.onnx`** to float DLC (no **`--quantization_overrides`** in this flow):
+Convert DETR ResNet101 ONNX to DLC (no **`--quantization_overrides`** in this flow):
 
 ```bash
 snpe-onnx-to-dlc \
@@ -99,7 +94,10 @@ snpe-onnx-to-dlc \
   --output_path dlcs/detr_resnet101_fp32.dlc
 ```
 
-After you have **`dlcs/detr_resnet101_fp32.dlc`**, build calibration raws at **`480×480`** (match **`-s 480`** to your model’s expected input size), then quantize:
+Quantize DETR ResNet101 FP32 model to INT8:
+
+1. Prepare calibration images in `test_img/`.
+2. Build square resized images / raw assets and a file list at **`output_img_480`**:
 
 ```bash
 mkdir -p output_img_480
