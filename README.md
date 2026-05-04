@@ -41,6 +41,8 @@ Create an output folder:
 mkdir -p dlcs
 ```
 
+---
+
 ### YOLOv8
 
 Convert YOLOv8 ONNX to DLC with quantization encodings:
