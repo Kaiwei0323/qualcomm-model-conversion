@@ -38,6 +38,11 @@ RUN apt-get update && apt-get install -y \
 # Project + pre-downloaded models/, encodings/, sdks/ (from download.sh on the host)
 COPY . .
 
+# sdks/ is not in git; without download.sh the COPY above has no SNPE tree and setup_env.sh fails obscurely
+RUN test -f "${SNPE_ROOT}/bin/check-python-dependency" \
+  || (echo "ERROR: SNPE SDK not found at ${SNPE_ROOT}. On the host, from the repo root run: bash download.sh" \
+      && exit 1)
+
 # Use `bash` so CRLF scripts still run; keep LF via .gitattributes (./setup_env.sh needs Unix shebang)
 RUN bash setup_env.sh
 
